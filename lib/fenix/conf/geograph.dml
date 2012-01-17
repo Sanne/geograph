@@ -1,0 +1,29 @@
+package it.algo.geograph.domain;
+
+
+/*
+valueType java.math.BigDecimal as Decimal {
+    externalizeWith {
+        String toString();
+    }
+}
+*/
+
+class GeoObject {
+  Integer latitude;
+  Integer longitude;
+}
+
+
+// This is the root domain object
+class Root {
+    boolean loaded;         // auxiliary slot for the bootstrap sequence
+    Integer numGeoObjectIds;    // for the generation of geo object ids
+}
+
+relation RootHasGeoObjects {
+    Root playsRole root;
+    GeoObject playsRole geoObjects {
+	multiplicity *;
+    }
+}

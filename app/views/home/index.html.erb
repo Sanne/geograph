@@ -1,0 +1,91 @@
+<!-- registering with socky message server on the public channel move -->
+
+<!-- a simple heading title -->
+<h1 style="text-align: center;">Geograph Monitor</h1>
+
+<div style="text-align: center; margin: 0 auto; width: 1024px; height: 768px; background-color: #FCEED8; border: 1px solid #A9A9A9" class="map">
+  <% @geo_objects.each do |geo_object| %>
+  <div id="geo_object_<%= geo_object.id %>" style="position: relative; width: 10px; height: 10px; color: blue; background-color: red; top: <%= geo_object.longitude.to_i * 7 %>px; left: <%= geo_object.latitude.to_i * 10 %>px; font-size: 12px;">
+    <%= geo_object.id %>
+  </div>
+  <% end %>
+</div>
+
+<div id="geo-template" style="display: none; position: relative; width: 10px; height: 10px; background-color: blue; top: 0px; left: 0px; font-size: 12px;">
+</div>
+
+<script type="text/javascript">
+  var geoObject = null;
+  var clientId = '<%= session[:session_id] %>';
+
+  function onPercept(perception) {
+    //$('ul').append('<li>' + percept + '</li>');
+    if(perception["header"]["action"] == "Actions::CreateAction") {
+      geoObject = perception["data"]["geo_object"];
+    } else {
+      geoObject = perception["data"]["geo_object"]["id"];
+    }
+    var geoDiv = $('#geo_object_' + geoObject);
+    if(geoDiv.size() == 0) {
+      geoDiv = createGeoDiv(geoObject);
+    }
+    geoDiv.animate({
+      top: (parseInt(perception["data"]["geo_object"]["longitude"]) * 7) + 'px',
+      left: (parseInt(perception["data"]["geo_object"]["latitude"]) * 10) + 'px',
+      'background-color': 'red'
+    });
+  }
+
+  function createGeoDiv(geoId) {
+    var geoObject = $('#geo-template').clone();
+    geoObject.attr('id', 'geo_object_' + geoId);
+    geoObject.text(geoId);
+    geoObject.appendTo('.map');
+    return geoObject;
+  }
+
+  function sendOnReturn(event) {
+    if(geoObject == null) {
+      create();
+    } else {
+      move();
+    }
+  }
+
+  function create(){
+    // create the geo object
+    var cmd = {agent: {id: clientId, status: 'idle'}, cmd: 'actions::create', latitude: 0, longitude: 0};
+    console.log(JSON.stringify(cmd));
+    client.send( destination, {}, JSON.stringify(cmd) );
+  }
+
+  function move(){
+    // move the geo object
+    var lat = $('#latitude').val();
+    var lon = $('#longitude').val();
+    var cmd = {agent: {id: clientId, status: 'idle'}, cmd: 'actions::move', geo_object: geoObject, latitude: lat, longitude: lon};
+    console.log(JSON.stringify(cmd));
+    client.send( destination, {header1: 'header1 value'}, JSON.stringify(cmd) );
+  }
+
+
+
+
+  // the javascript function registered to _onkeyup_ of the edit box.
+  function sendOnReturnOld(event){
+
+    var lat = $('#latitude').val();
+    var lon = $('#longitude').val();
+    // send message
+    
+    //ask an agent, through the commands agent controller
+    //to perform Actions::MoveAction with parameters latitude and longitude
+    $askAgent({ agent: 'actions', cmd: 'actions::move', data: {latitude: lat, longitude: lon} });
+
+    //and clear the input box
+    //$('#new-message').val('');
+    
+  }
+
+</script>
+

@@ -1,0 +1,125 @@
+<%= register_websocket(:channels => ["all"], :client => current_user.id) %>
+
+<h1 style="text-align: center;">Google Maps Monitor</h1>
+<div id="map_canvas" style="width:1024px; height:768px; margin: 0 auto;"></div>
+
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCXQO2oj9QzIl0RGXzDCO-JTa2j--FbVNg&sensor=true"></script>
+<script type="text/javascript">
+  var map = null;
+  var markers = {};
+  var infoWindows = {};
+  var geoObjects = [];
+  var mapCenterLat = 41.9;
+  var mapCenterLng = 12.4;
+  var infoWindowTemplate = '<div id="content-{GEOOBJECTID}"><h2 id="content-heading-{GEOOBJECTID}">{GEOOBJECTTYPE}</h2><div id="body-content-{GEOOBJECTID}">{GEOOBJECTDATA}</div></div>';
+
+  function initializeMap() {
+    var latlng = new google.maps.LatLng(mapCenterLat, mapCenterLng);
+    var myOptions = {
+      zoom: 2,
+      center: latlng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+  }
+
+  function addGeoObject(geoObject) {
+    //var latlng = new google.maps.LatLng(mapCenterLat + (geoObject.latitude/100), mapCenterLng + (geoObject.longitude/100));
+    var latlng = new google.maps.LatLng(geoObject.latitude, geoObject.longitude);
+    markers[geoObject.id] = new google.maps.Marker({
+      position: latlng,
+      map: map,
+      //animation: google.maps.Animation.DROP,
+      title:"GeoObject: " + geoObject.id
+    });
+    // centerMap(latlng);
+
+    addInfoWindow(geoObject, markers[geoObject.id]);
+  }
+
+  function addInfoWindow(geoObject, marker) {
+    var infoWindowContent = infoWindowSource(geoObject);
+    var infoWindow = new google.maps.InfoWindow({
+      content: infoWindowContent
+    });
+    google.maps.event.addListener(marker, 'click', function() {
+        infoWindow.open(map, marker);
+    });
+    infoWindows[geoObject.id] = infoWindow;
+  }
+
+  function updateInfoWindow(geoObject) {
+    var infoWindowContent = infoWindowSource(geoObject);
+    infoWindows[geoObject.id].setContent(infoWindowContent);
+  }
+
+  function infoWindowSource(geoObject) {
+    var infoWindowContent = infoWindowTemplate.replace(/{GEOOBJECTID}/g, geoObject.id);
+    infoWindowContent = infoWindowContent.replace(/{GEOOBJECTTYPE}/g, geoObject.data['type']);
+    infoWindowContent = infoWindowContent.replace(/{GEOOBJECTDATA}/g, geoObject.data['body']);
+    return infoWindowContent;
+  }
+
+  function moveGeoObject(geoObject) {
+    //var latlng = new google.maps.LatLng(mapCenterLat + (geoObject.latitude/100), mapCenterLng + (geoObject.longitude/100));
+    var latlng = new google.maps.LatLng(geoObject.latitude, geoObject.longitude);
+    markers[geoObject.id].setPosition(latlng);
+    //markers[geoObject.id].setAnimation(google.maps.Animation.DROP);
+    //markers[geoObject.id].setAnimation(google.maps.Animation.BOUNCE);
+    //setTimeout(function() {markers[geoObject.id].setAnimation(null);}, 500);
+    //centerMap(latlng);
+
+    updateInfoWindow(geoObject);
+  }
+
+  function destroyGeoObject(geoObject) {
+    if(markers[geoObject.id] == undefined) return;
+    markers[geoObject.id].setMap(null);
+    markers[geoObject.id] = null;
+  }
+
+  function destroyGeoObjects(ids) {
+    ids.each(function(_id){
+      markers[_id].setMap(null);
+      markers[_id] = null;
+    });
+  }
+
+  function onPercept(perception) {
+    var geoObject = perception["data"];
+
+    if(perception["header"]["action"] == "Actions::DestroyAction") {
+      destroyGeoObject(geoObject);
+      return;
+    }
+
+    if(perception["header"]["action"] == "Actions::DestroyPostsAction") {
+      destroyGeoObjects(geoObject.ids);
+      return;
+    }
+    
+    if(markers[geoObject.id] != undefined) {
+      moveGeoObject(geoObject);
+    } else {
+      addGeoObject(geoObject);
+    }
+  }
+
+  function centerMap(latLng) {
+    var bounds = new google.maps.LatLngBounds();
+    bounds.extend(latLng);
+    map.fitBounds(bounds);
+    map.setZoom(8);
+  }
+
+
+  $(document).ready(function() {
+    initializeMap();
+    geoObjects = <%= @geo_objects.to_json.html_safe %>;
+    geoObjects.each(function(geoObject){
+      addGeoObject(geoObject);
+    });
+  });
+</script>
+
