@@ -2,11 +2,11 @@
 # DO NOT EDIT MANUALLY 
 
         --- 
-ws_adapter: Madmass::Comm::SockySender
-host: localhost
-port: "9090"
-secure: "false"
-secret: my_secret_key
+:ws_adapter: Madmass::Comm::SockySender
+:host: localhost
+:port: "9090"
+:secure: "false"
+:secret: my_secret_key
 :db: true
 :ar: true
 :devise: true
