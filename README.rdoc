@@ -7,13 +7,14 @@ In order to run the application follow these steps:
 2. Clone the project from the git repository:
     git clone git://github.com/algorithmica/geograph.git
 3. Install the needed gem libraries: 
-    open a shell,
-    cd to the project folder
-    and run jruby -S bundle install
-    Note: if you are on a linux machine you must add two gems to the Gemfile before executing the bundle install:
-      open the Gemfile (in the root of the application) and add
-      gem 'execjs'
-      gem 'therubyracer'
+   open a shell,
+   cd to the project folder
+   and run
+    jruby -S bundle install
+   Note: if you are on a linux machine you must add two gems to the Gemfile before executing the bundle install:
+   open the Gemfile (in the root of the application) and add
+    gem 'execjs'
+    gem 'therubyracer'
 4. Setup the database (make sure sqlite3 is installed):
     jruby -S rake db:setup
 5. Deploy the application into TorqueBox by executing this command in the project folder:
