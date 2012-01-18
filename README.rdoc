@@ -11,7 +11,7 @@ In order to run the application follow these steps:
    cd to the project folder
    and run
     jruby -S bundle install
-   Note: if you are on a linux machine you must add two gems to the Gemfile before executing the bundle install:
+   <b>Note</b>: if you are on a linux machine you must add two gems to the Gemfile <em>before executing the bundle install</em>
    open the Gemfile (in the root of the application) and add
     gem 'execjs'
     gem 'therubyracer'
