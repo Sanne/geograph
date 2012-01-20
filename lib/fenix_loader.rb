@@ -4,13 +4,12 @@ require 'java'
 if Rails.env == 'production'
   # for torquebox put all fenix libraries into jboss lib folder
   #FENIX_PATH = "#{ENV['JBOSS_HOME']}/standalone/deployments/fenix.sar" unless defined?(FENIX_PATH)
-  FENIX_PATH = "#{ENV['JBOSS_HOME']}/standalone/lib" unless defined?(FENIX_PATH)
+  FENIX_PATH = File.join(ENV['JBOSS_HOME'], 'standalone', 'lib') unless defined?(FENIX_PATH)
 else
   # for standalone version libraries are inside the application lib folder
-  FENIX_PATH = "#{Rails.root}/lib/fenix" unless defined?(FENIX_PATH)
-
-
+  FENIX_PATH = File.join(Rails.root, 'lib', 'fenix') unless defined?(FENIX_PATH)
 end
+
 # require all Fenix and dependencies jars
 #Dir[File.join(FENIX_PATH, '*.jar')].each{|jar|
 #  puts "Loading JAR: #{jar}"
@@ -20,9 +19,9 @@ end
 require File.join(FENIX_PATH, 'antlr-2.7.6.jar')
 require File.join(FENIX_PATH, 'jvstm.jar')
 require File.join(FENIX_PATH, 'fenix-framework-r53358.jar')
-require File.join(FENIX_PATH, 'geograph-domain-fenix.jar')
+require File.join(FENIX_PATH, 'geograph-domain.jar')
 
-FENIX_CONF_PATH = "#{Rails.root}/lib/fenix/conf" unless defined?(FENIX_CONF_PATH)
+FENIX_CONF_PATH = File.join(FENIX_PATH, 'conf') unless defined?(FENIX_CONF_PATH)
 
 $CLASSPATH << FENIX_PATH
 
@@ -38,6 +37,26 @@ FenixRoot = Java::ItAlgoGeographDomain::Root
 CloudTmInit = Java::OrgCloudtmFramework::Init
 CloudTmTxSystem = Java::OrgCloudtmFramework::TxSystem
 CloudTmConfig = Java::OrgCloudtmFramework::CloudtmConfig
+
+FenixTransactionManager = Java::OrgCloudtmFrameworkFenix::FFTxManager
+IllegalWriteException = Java::PtIstFenixframeworkPstm::IllegalWriteException
+
+class FenixTransactionManager
+  def withTransaction_with_exception(&block)
+    begin
+      withTransaction_without_exception(block)
+    rescue NativeException => e
+      if e.cause.is_a?(IllegalWriteException)
+        setReadOnly(false)
+        withTransaction_without_exception(block)
+      else
+        raise e.cause
+      end
+    end
+  end
+
+  alias_method_chain(:withTransaction, :exception)
+end
 
 
 # In order to bypass the use of the constructor with closure, that causes problems

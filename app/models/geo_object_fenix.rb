@@ -17,5 +17,13 @@ class GeoObjectFenix < FenixGeoObject
       instance
     end
 
+    def all
+      manager = CloudTmTransactionManager.manager
+      geo_objects = []
+      manager.withTransaction do
+        geo_objects = manager.getRoot.geoGeoObjects
+      end
+      geo_objects
+    end
   end
 end

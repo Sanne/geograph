@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120113172306) do
+ActiveRecord::Schema.define(:version => 20120120132428) do
 
   create_table "agents", :force => true do |t|
     t.string   "status"
@@ -18,6 +18,11 @@ ActiveRecord::Schema.define(:version => 20120113172306) do
     t.datetime "updated_at"
     t.float    "latitude"
     t.float    "longitude"
+  end
+
+  create_table "edges", :force => true do |t|
+    t.integer "geo_object_id"
+    t.integer "connection_id"
   end
 
   create_table "geo_objects", :force => true do |t|
@@ -28,6 +33,11 @@ ActiveRecord::Schema.define(:version => 20120113172306) do
     t.text     "data"
     t.integer  "geo_referenced_id"
     t.string   "geo_referenced_type"
+  end
+
+  create_table "jobs", :force => true do |t|
+    t.string  "name"
+    t.boolean "enabled"
   end
 
   create_table "messages", :force => true do |t|

@@ -6,8 +6,8 @@
          provides a DummyTransactionManager, which according to documentation
          (http://docs.jboss.org/infinispan/4.0/apidocs/org/infinispan/transaction/tm/DummyTransactionManager.html):
          "Simple transaction manager implementation that maintains transaction
-         state in memory only." 
-         
+         state in memory only."
+
          Is it enough?
     -->
     <!-- <transaction -->
