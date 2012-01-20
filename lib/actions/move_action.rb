@@ -36,7 +36,8 @@ module Actions
           :id => @geo_object.id,
           :latitude => @geo_object.latitude,
           :longitude => @geo_object.longitude,
-          :data => @geo_object.data
+          :data => @geo_object.data,
+          :edges => @geo_object.edges
           }
       }
       Madmass.current_perception = []
