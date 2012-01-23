@@ -1,17 +1,16 @@
 package it.algo.geograph.domain;
 
 
-/*
 valueType java.math.BigDecimal as Decimal {
     externalizeWith {
         String toString();
     }
 }
-*/
+
 
 class GeoObject {
-  Integer latitude;
-  Integer longitude;
+  Decimal latitude;
+  Decimal longitude;
 }
 
 

@@ -16,7 +16,7 @@
     <!--   useEagerLocking="false"/> -->
     <transaction
         transactionMode="TRANSACTIONAL"
-        transactionManagerLookupClass="org.infinispan.transaction.lookup.JBossStandaloneJTAManagerLookup"/>
+        transactionManagerLookupClass="org.infinispan.transaction.lookup.JBossTransactionManagerLookup"/>
 
 
     <!-- Should we enable eviction?  I think not. -->
