@@ -2,10 +2,14 @@ class HomeController < ApplicationController
   before_filter :authenticate_agent
 
   def index
-    @geo_objects = GeoObject.all
+    CloudTm::TxSystem.getManager.withTransaction do
+      @geo_objects = CloudTm::GeoObject.all.to_json
+    end
   end
 
   def map
-    @geo_objects = GeoObject.all
+    CloudTm::TxSystem.getManager.withTransaction do
+      @geo_objects = CloudTm::GeoObject.all.to_json
+    end
   end
 end

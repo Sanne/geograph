@@ -9,6 +9,7 @@
   var markers = {};
   var infoWindows = {};
   var geoObjects = [];
+  var mapEdges = [];
   var mapCenterLat = 41.9;
   var mapCenterLng = 12.4;
   var infoWindowTemplate = '<div id="content-{GEOOBJECTID}"><h2 id="content-heading-{GEOOBJECTID}">{GEOOBJECTTYPE}</h2><div id="body-content-{GEOOBJECTID}">{GEOOBJECTDATA}</div></div>';
@@ -55,6 +56,7 @@
   }
 
   function infoWindowSource(geoObject) {
+    $log(JSON.stringify(geoObject));
     var infoWindowContent = infoWindowTemplate.replace(/{GEOOBJECTID}/g, geoObject.id);
     infoWindowContent = infoWindowContent.replace(/{GEOOBJECTTYPE}/g, geoObject.data['type']);
     infoWindowContent = infoWindowContent.replace(/{GEOOBJECTDATA}/g, geoObject.data['body']);
@@ -106,6 +108,41 @@
     }
   }
 
+  function onEdgesPercept(perception) {
+    removeAllEdges();
+    var edges = perception["data"];
+    edges.each(function(edge) {
+      addEdge(edge);
+    });
+  }
+
+  function addEdge(edge) {
+    $log(JSON.stringify(edge));
+    
+    var edgeCoordinates = [
+      new google.maps.LatLng(edge.from.latitude, edge.from.longitude),
+      new google.maps.LatLng(edge.to.latitude, edge.to.longitude)
+    ];
+    
+    var edgePath = new google.maps.Polyline({
+      path: edgeCoordinates,
+      strokeColor: "#FF0000",
+      strokeOpacity: 1.0,
+      strokeWeight: 2
+    });
+
+    edgePath.setMap(map);
+    mapEdges.push(edgePath);
+  }
+
+  function removeAllEdges() {
+    mapEdges.each(function(mEdge) {
+      mEdge.setMap(null);
+      mEdge = null;
+    });
+    mapEdges = [];
+  }
+
   function centerMap(latLng) {
     var bounds = new google.maps.LatLngBounds();
     bounds.extend(latLng);
@@ -116,7 +153,8 @@
 
   $(document).ready(function() {
     initializeMap();
-    geoObjects = <%= @geo_objects.to_json.html_safe %>;
+    geoObjects = <%= @geo_objects.html_safe %>;
+    $log(JSON.stringify(geoObjects));
     geoObjects.each(function(geoObject){
       addGeoObject(geoObject);
     });

@@ -15,10 +15,8 @@ $CLASSPATH << FENIX_CONF_PATH
 
 module Fenix
   Config                  = Java::PtIstFenixframework::Config
+  RelationList            = Java::PtIstFenixframeworkPstm::RelationList
   FenixTransactionManager = Java::OrgCloudtmFrameworkFenix::FFTxManager
-  # Load domain models
-  GeoObject               = Java::ItAlgoGeographDomain::GeoObject
-  Root                    = Java::ItAlgoGeographDomain::Root
   
   # This is the Fenix Framework loader. It provides a simple way to
   # run the framework initialization process.
@@ -34,7 +32,7 @@ module Fenix
         config.init(
           :domainModelPath => File.join(FENIX_CONF_PATH, options[:dml]),
           :dbAlias => File.join(FENIX_CONF_PATH, options[:conf]),
-          :rootClass => Fenix::Root.java_class,
+          :rootClass => options[:root] || DomainRoot.java_class,
           :repositoryType => Fenix::Config::RepositoryType::INFINISPAN
         )
 
@@ -45,7 +43,7 @@ module Fenix
 end
 
 Dir[File.join(FENIX_PATH, '*.rb')].each{|ruby|
-  next if ruby.match(/loader.rb/)
+  next if ruby.match(/loader\.rb/)
   require ruby
 }
 

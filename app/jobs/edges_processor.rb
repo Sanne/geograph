@@ -2,16 +2,17 @@
 class EdgesProcessor
   def initialize(options = {})
     @options = options
+    Madmass.current_agent = Madmass::Agent::ProxyAgent.new(:status => 'init')
   end
 
   # Starts the production
   def run
     Rails.logger.debug "Processing Edges"
-    action = Madmass::Action::ActionFactory.make({
+    Madmass.current_agent.execute({
         :cmd => 'actions::process_edges',
-        :distance => 10000
+        # distance in meters
+        :distance => 2000
       })
-    action.execute
   end
 
 end

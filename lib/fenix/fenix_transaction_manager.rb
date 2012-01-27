@@ -3,6 +3,7 @@ module Fenix
   CommitException = Java::Jvstm::CommitException
   WriteOnReadException = Java::Jvstm::WriteOnReadException
   UnableToDetermineIdException = Java::PtIstFenixframeworkPstm::AbstractDomainObject::UnableToDetermineIdException
+  PersistenceException = Java::PtIstFenixframeworkPstmRepository::PersistenceException
 
   # This is the Fenix Transaction Manager extension provided to resolve the issue:
   # Masquerading of native Java exceptions http://jira.codehaus.org/browse/JRUBY-1300.
@@ -32,6 +33,10 @@ module Fenix
         rescue UnableToDetermineIdException => unableToDetermineIdException
           Rails.logger.error "Restaring TX: unable to determine id. Cause: #{unableToDetermineIdException.getCause}"
           Rails.logger.error "#{unableToDetermineIdException}"
+          Java::PtIstFenixframeworkPstm::Transaction.abort
+          finished = true
+        rescue PersistenceException => perc
+          Rails.logger.error "PersistenceException. Cause: #{perc.getCause}"
           Java::PtIstFenixframeworkPstm::Transaction.abort
           finished = true
         ensure

@@ -1,5 +1,11 @@
 $perceptStrategy("geo_object" , function(percepts){
-//  $log("Strategy for percept 'geo_object'. Percept => " + JSON.stringify(percepts));
   onPercept(percepts);
 })
 
+$perceptStrategy("geo_agent" , function(percepts){
+  // do nothing
+})
+
+$perceptStrategy("edges" , function(percepts){
+  onEdgesPercept(percepts);
+})

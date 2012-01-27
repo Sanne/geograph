@@ -33,6 +33,15 @@
     <locking isolationLevel="REPEATABLE_READ" writeSkewCheck="true" />
 
     <versioning versioningScheme="SIMPLE" enabled="true" />
+    <!--
+    <loaders passivation="false" shared="true" preload="false">
+       <loader class="org.infinispan.loaders.file.FileCacheStore" fetchPersistentState="true" ignoreModifications="false" purgeOnStartup="false">
+         <properties>
+           <property name="location" value="/tmp/geograph"/>
+         </properties>
+       </loader>
+     </loaders>
+     -->
   </default>
 </infinispan>
 

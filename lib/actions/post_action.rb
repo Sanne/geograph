@@ -20,6 +20,23 @@ module Actions
     # the action effects.
     def execute
       # search if the agent related to all geo referenced posts (geo objects) exists
+      @agent = CloudTm::Agent.find(@parameters[:geo_agent])
+      unless @agent
+        # create the agent if it does not exists
+        @agent = CloudTm::Agent.create
+      end
+      @geo_post = CloudTm::GeoObject.create
+      @geo_post.update_attributes(
+        :latitude => java.math.BigDecimal.new(@parameters[:latitude]),
+        :longitude => java.math.BigDecimal.new(@parameters[:longitude]),
+        :body => @parameters[:data][:body],
+        :type => @parameters[:data][:type]
+      )
+      @agent.addGeoObjects(@geo_post)
+    end
+
+    def execute_ar
+      # search if the agent related to all geo referenced posts (geo objects) exists
       @agent = Agent.where(:id => @parameters[:geo_agent]).first
       unless @agent
         # create the agent if it does not exists
@@ -36,6 +53,22 @@ module Actions
     # [MANDATORY] Override this method in your action to define
     # the perception content.
     def build_result
+      p = Madmass::Perception::Percept.new(self)
+      p.add_headers({:topics => ['all']}) #who must receive the percept
+      p.data =  {
+        :geo_agent => @agent.oid,
+        :geo_object => {
+          :id => @geo_post.oid,
+          :latitude => @geo_post.latitude.to_s,
+          :longitude => @geo_post.longitude.to_s,
+          :data => {:body => @geo_post.body, :type => @geo_post.type }
+          }
+      }
+      Madmass.current_perception = []
+      Madmass.current_perception << p
+    end
+
+    def build_result_ar
       p = Madmass::Perception::Percept.new(self)
       p.add_headers({:topics => ['all']}) #who must receive the percept
       p.data =  {

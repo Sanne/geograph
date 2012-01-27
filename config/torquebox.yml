@@ -11,12 +11,12 @@ topics:
 queues:
   /queue/commands:
 
-#jobs:
-#  edges.processor:
-#    job:  EdgesProcessor
-#    cron: '0 */1 * * * ?'
-#    description:  Process edges for all geo objects
-#    singleton: true
+jobs:
+  edges.processor:
+    job:  EdgesProcessor
+    cron: '*/30 * * * * ?'
+    description:  Process edges for all geo objects
+    singleton: true
 
 #stomp:
 #  stomplets:

@@ -11,8 +11,18 @@ valueType java.math.BigDecimal as Decimal {
 class GeoObject {
   Decimal latitude;
   Decimal longitude;
+  String body;
+  String type;
 }
 
+class Agent {
+  String status;
+}
+
+class Job {
+  String name;
+  boolean enabled;
+}
 
 // This is the root domain object
 class Root {
@@ -22,7 +32,25 @@ class Root {
 
 relation RootHasGeoObjects {
     Root playsRole root;
-    GeoObject playsRole geoObjects {
-	multiplicity *;
-    }
+    GeoObject playsRole geoObjects { multiplicity *; }
+}
+
+relation RootHasAgents {
+    Root playsRole root;
+    Agent playsRole agents { multiplicity *; }
+}
+
+relation RootHasJobs {
+    Root playsRole root;
+    Job playsRole jobs { multiplicity *; }
+}
+
+relation GeoObjectHasEdges {
+    GeoObject playsRole incoming { multiplicity 0..*; }
+    GeoObject playsRole outcoming { multiplicity 0..*; }
+}
+
+relation AgentHasGeoObjects {
+    Agent playsRole agent;
+    GeoObject playsRole geoObjects { multiplicity 0..*; }
 }

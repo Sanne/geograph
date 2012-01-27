@@ -19,12 +19,28 @@ module Actions
     # [MANDATORY] Override this method in your action to define
     # the action effects.
     def execute
+      attrs = @parameters.clone
+      data = attrs.delete(:data)
+      attrs.merge!(data)
+      attrs[:latitude] = java.math.BigDecimal.new(attrs[:latitude])
+      attrs[:longitude] = java.math.BigDecimal.new(attrs[:longitude])
+      @geo_object = CloudTm::GeoObject.create(attrs)
+    end
+
+    def execute_ar
       @geo_object = GeoObject.create(@parameters)
     end
 
     # [MANDATORY] Override this method in your action to define
     # the perception content.
     def build_result
+      p = Madmass::Perception::Percept.new(self)
+      p.add_headers({:clients => [Madmass.current_agent.id]}) #who must receive the percept
+      p.data =  {:geo_object => @geo_object.oid}
+      Madmass.current_perception << p
+    end
+
+    def build_result_ar
       p = Madmass::Perception::Percept.new(self)
       p.add_headers({:clients => [Madmass.current_agent.id]}) #who must receive the percept
       p.data =  {:geo_object => @geo_object.id}

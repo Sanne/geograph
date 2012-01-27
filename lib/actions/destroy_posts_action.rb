@@ -10,8 +10,12 @@ module Actions
     # [MANDATORY] Override this method in your action to define
     # the action effects.
     def execute
-      @geo_agent = Agent.find(@parameters[:geo_agent])
-      #geo_agent.destroy if geo_agent
+      @ids = []
+      @geo_agent.getGeoObjects.each do |geo_object|
+        @ids << geo_object.oid
+        geo_object.destroy
+      end
+      @geo_agent.destroy
     end
 
     # [MANDATORY] Override this method in your action to define
@@ -20,10 +24,20 @@ module Actions
       p = Madmass::Perception::Percept.new(self)
       p.add_headers({:topics => ['all']}) #who must receive the percept
       p.data =  {:geo_object => {
-          :ids => @geo_agent.geo_objects.map(&:id)
+          :ids => @ids
           }
       }
       Madmass.current_perception << p
+    end
+
+    # [OPTIONAL] - The default implementation returns always true
+    # Override this method in your action to define when the action is
+    # applicable (i.e. to verify the action preconditions).
+    def applicable?
+      unless @geo_agent = CloudTm::Agent.find(@parameters[:geo_agent])
+        why_not_applicable.add(:'not-found', "Agent #{@parameters[:geo_agent]} doesn't exists.")
+      end
+      return why_not_applicable.empty?
     end
 
   end

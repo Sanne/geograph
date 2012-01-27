@@ -10,6 +10,11 @@ module Actions
     # [MANDATORY] Override this method in your action to define
     # the action effects.
     def execute
+      geo_object = CloudTm::GeoObject.find(@parameters[:geo_object])
+      geo_object.destroy if geo_object
+    end
+
+    def execute_ar
       geo_object = GeoObject.where(:id => @parameters[:geo_object]).first
       geo_object.destroy if geo_object
     end
