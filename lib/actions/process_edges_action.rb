@@ -1,3 +1,4 @@
+require 'haversine_distance'
 
 # This file is the implementation of the  MoveAction.
 # The implementation must comply with the action definition pattern
@@ -5,14 +6,14 @@
 
 module Actions
   class ProcessEdgesAction < Madmass::Action::Action
-    action_params :distance
+    #action_params :distance
     #action_states :none
     #next_state :none
 
-    # [OPTIONAL]  Add your initialization code here.
-    #    def initialize params
-    #      super
-    #    end
+    def initialize params
+     super
+     @channels << :all
+    end
 
 
     # [MANDATORY] Override this method in your action to define
@@ -22,35 +23,13 @@ module Actions
       geo_objects = CloudTm::GeoObject.all
       geo_objects.each_with_index do |geo_object1, index|
         # remove previous edges
-        geo_object1.getIncoming.each do |inc|
-          geo_object1.removeIncoming(inc)
-        end
-        geo_object1.getOutcoming.each do |out|
-          geo_object1.removeOutcoming(out)
-        end
+        geo_object1.remove_edges
         # connect edges
         geo_objects.to_a[(index+1)..-1].each do |geo_object2|
-          if HaversineDistance.calculate(geo_object1, geo_object2) <= @parameters[:distance]
+          if HaversineDistance.calculate(geo_object1, geo_object2) <= @job.distance
             geo_object1.addIncoming(geo_object2)
             geo_object2.addIncoming(geo_object1)
             @edges << [geo_object1, geo_object2]
-          end
-        end
-      end
-    end
-
-    def execute_ar
-      geo_objects = GeoObject.all
-      geo_objects.each_with_index do |geo_object1, index|
-        # remove previous edges
-        geo_object1.edges.clear
-        # connect edges
-        geo_objects[(index+1)..-1].each do |geo_object2|
-          if HaversineDistance.calculate(geo_object1, geo_object2) <= @parameters[:distance]
-            edge = geo_object1.edges.build(:connection_id => geo_object2.id)
-            edge.save
-            inverse_edge = geo_object2.edges.build(:connection_id => geo_object1.id)
-            inverse_edge.save
           end
         end
       end
@@ -60,7 +39,7 @@ module Actions
     # the perception content.
     def build_result
       p = Madmass::Perception::Percept.new(self)
-      p.add_headers({:topics => ['all']}) #who must receive the percept
+#      p.add_headers({:topics => ['all']}) #who must receive the percept
       p.data =  {:edges => []}
       @edges.each do |edge|
         edge_data = {:from => {
@@ -77,27 +56,6 @@ module Actions
       Madmass.current_perception = []
       Madmass.current_perception << p
     end
-
-    def build_result_ar
-      p = Madmass::Perception::Percept.new(self)
-      p.add_headers({:topics => ['all']}) #who must receive the percept
-      p.data =  {:edges => []}
-      Edge.all.each do |edge|
-        edge_data = {:from => {
-            :id => edge.geo_object.id,
-            :latitude => edge.geo_object.latitude,
-            :longitude => edge.geo_object.longitude
-          }, :to => {
-            :id => edge.connection.id,
-            :latitude => edge.connection.latitude,
-            :longitude => edge.connection.longitude
-          }}
-        p.data[:edges] << edge_data
-      end
-      Madmass.current_perception = []
-      Madmass.current_perception << p
-    end
-
 
     # [OPTIONAL] - The default implementation returns always true
     # Override this method in your action to define when the action is
@@ -119,17 +77,10 @@ module Actions
     private
 
     def job_enabled?
-      jobs = CloudTm::Job.where(:name => 'edges-processor')
-      # FIXME: must return false when jobs integrated
-      return true if jobs.empty?
-      return jobs.first.enabled?
-    end
-
-    def job_enabled_ar?
-      jobs = Job.where(:name => 'edges-processor')
-      # FIXME: must return false when jobs integrated
-      return true if jobs.empty?
-      return jobs.first.enabled?
+      jobs = CloudTm::Job.where(:name => 'job')
+      return false if jobs.empty?
+     @job = jobs.first
+      return @job.enabled?
     end
 
   end

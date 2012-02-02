@@ -13,6 +13,7 @@ module Actions
     def initialize params
       super
       @geo_post = nil
+      @channels << :all
     end
 
 
@@ -33,28 +34,17 @@ module Actions
         :type => @parameters[:data][:type]
       )
       @agent.addGeoObjects(@geo_post)
-    end
 
-    def execute_ar
-      # search if the agent related to all geo referenced posts (geo objects) exists
-      @agent = Agent.where(:id => @parameters[:geo_agent]).first
-      unless @agent
-        # create the agent if it does not exists
-        @agent = Agent.create
+      if edges_enabled?
+        @geo_post.renew_edges(@job.distance)
       end
-      @geo_post = GeoObject.new(
-        :latitude => @parameters[:latitude],
-        :longitude => @parameters[:longitude],
-        :data => @parameters[:data]
-      )
-      @agent.geo_objects << @geo_post
     end
 
     # [MANDATORY] Override this method in your action to define
     # the perception content.
     def build_result
       p = Madmass::Perception::Percept.new(self)
-      p.add_headers({:topics => ['all']}) #who must receive the percept
+#      p.add_headers({:topics => ['all']}) #who must receive the percept
       p.data =  {
         :geo_agent => @agent.oid,
         :geo_object => {
@@ -64,25 +54,15 @@ module Actions
           :data => {:body => @geo_post.body, :type => @geo_post.type }
           }
       }
+
+      if edges_enabled?
+        p.data[:edges] = @geo_post.edges_for_percept
+      end
+
       Madmass.current_perception = []
       Madmass.current_perception << p
     end
 
-    def build_result_ar
-      p = Madmass::Perception::Percept.new(self)
-      p.add_headers({:topics => ['all']}) #who must receive the percept
-      p.data =  {
-        :geo_agent => @agent.id,
-        :geo_object => {
-          :id => @geo_post.id,
-          :latitude => @geo_post.latitude,
-          :longitude => @geo_post.longitude,
-          :data => @geo_post.data
-          }
-      }
-      Madmass.current_perception = []
-      Madmass.current_perception << p
-    end
 
     # [OPTIONAL] - The default implementation returns always true
     # Override this method in your action to define when the action is
@@ -101,6 +81,15 @@ module Actions
     # def process_params
     #   puts "Implement me!"
     # end
+
+    private
+
+    def edges_enabled?
+      jobs = CloudTm::Job.where(:name => 'action')
+      return false if jobs.empty?
+      @job = jobs.first
+      return @job.enabled?
+    end
 
   end
 

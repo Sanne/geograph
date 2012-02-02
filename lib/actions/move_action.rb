@@ -13,6 +13,7 @@ module Actions
     def initialize params
       super
       @geo_object = nil
+      @channels << :all
     end
 
 
@@ -25,22 +26,16 @@ module Actions
         :body => @parameters[:data][:body],
         :type => @parameters[:data][:type]
       )
-    end
-
-    def execute_ar
-      @geo_object = GeoObject.where(:id => @parameters[:geo_object]).first
-      @geo_object.update_attributes(
-        :latitude => @parameters[:latitude],
-        :longitude => @parameters[:longitude],
-        :data => @parameters[:data]
-      )
+      if edges_enabled?
+        @geo_object.renew_edges(@job.distance)
+      end
     end
 
     # [MANDATORY] Override this method in your action to define
     # the perception content.
     def build_result
       p = Madmass::Perception::Percept.new(self)
-      p.add_headers({:topics => ['all']}) #who must receive the percept
+#      p.add_headers({:topics => ['all']}) #who must receive the percept
       p.data =  {:geo_object => {
           :id => @geo_object.oid,
           :latitude => @geo_object.latitude.to_s,
@@ -48,23 +43,15 @@ module Actions
           :data => {:body => @geo_object.body, :type => @geo_object.type }
           }
       }
+
+      if edges_enabled?
+        p.data[:edges] = @geo_object.edges_for_percept
+      end
+
       Madmass.current_perception = []
       Madmass.current_perception << p
     end
 
-    def build_result_ar
-      p = Madmass::Perception::Percept.new(self)
-      p.add_headers({:topics => ['all']}) #who must receive the percept
-      p.data =  {:geo_object => {
-          :id => @geo_object.id,
-          :latitude => @geo_object.latitude,
-          :longitude => @geo_object.longitude,
-          :data => @geo_object.data
-          }
-      }
-      Madmass.current_perception = []
-      Madmass.current_perception << p
-    end
 
     # [OPTIONAL] - The default implementation returns always true
     # Override this method in your action to define when the action is
@@ -81,6 +68,15 @@ module Actions
     # def process_params
     #   puts "Implement me!"
     # end
+
+    private
+
+    def edges_enabled?
+      jobs = CloudTm::Job.where(:name => 'action')
+      return false if jobs.empty?
+      @job = jobs.first
+      return @job.enabled?
+    end
 
   end
 

@@ -7,6 +7,11 @@ module Actions
   class DestroyPostsAction < Madmass::Action::Action
     action_params :geo_agent
 
+    def initialize params
+     super
+     @channels << :all
+    end
+    
     # [MANDATORY] Override this method in your action to define
     # the action effects.
     def execute
@@ -22,7 +27,7 @@ module Actions
     # the perception content.
     def build_result
       p = Madmass::Perception::Percept.new(self)
-      p.add_headers({:topics => ['all']}) #who must receive the percept
+      #p.add_headers({:topics => ['all']}) #who must receive the percept
       p.data =  {:geo_object => {
           :ids => @ids
           }

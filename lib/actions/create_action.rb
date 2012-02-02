@@ -13,6 +13,7 @@ module Actions
     def initialize params
       super
       @geo_object = nil
+      @clients << Madmass.current_agent.id
     end
 
 
@@ -27,23 +28,13 @@ module Actions
       @geo_object = CloudTm::GeoObject.create(attrs)
     end
 
-    def execute_ar
-      @geo_object = GeoObject.create(@parameters)
-    end
 
     # [MANDATORY] Override this method in your action to define
     # the perception content.
     def build_result
       p = Madmass::Perception::Percept.new(self)
-      p.add_headers({:clients => [Madmass.current_agent.id]}) #who must receive the percept
+      #p.add_headers({:clients => [Madmass.current_agent.id]}) #who must receive the percept
       p.data =  {:geo_object => @geo_object.oid}
-      Madmass.current_perception << p
-    end
-
-    def build_result_ar
-      p = Madmass::Perception::Percept.new(self)
-      p.add_headers({:clients => [Madmass.current_agent.id]}) #who must receive the percept
-      p.data =  {:geo_object => @geo_object.id}
       Madmass.current_perception << p
     end
 

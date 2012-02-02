@@ -1,6 +1,6 @@
 <%= register_websocket(:channels => ["all"], :client => current_user.id) %>
 
-<h1 style="text-align: center;">Google Maps Monitor</h1>
+<h1 style="text-align: center;">GeoGraph Monitor</h1>
 <div id="map_canvas" style="width:1024px; height:768px; margin: 0 auto;"></div>
 
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCXQO2oj9QzIl0RGXzDCO-JTa2j--FbVNg&sensor=true"></script>
@@ -9,7 +9,7 @@
   var markers = {};
   var infoWindows = {};
   var geoObjects = [];
-  var mapEdges = [];
+  var mapEdges = {};
   var mapCenterLat = 41.9;
   var mapCenterLng = 12.4;
   var infoWindowTemplate = '<div id="content-{GEOOBJECTID}"><h2 id="content-heading-{GEOOBJECTID}">{GEOOBJECTTYPE}</h2><div id="body-content-{GEOOBJECTID}">{GEOOBJECTDATA}</div></div>';
@@ -28,6 +28,7 @@
   function addGeoObject(geoObject) {
     //var latlng = new google.maps.LatLng(mapCenterLat + (geoObject.latitude/100), mapCenterLng + (geoObject.longitude/100));
     var latlng = new google.maps.LatLng(geoObject.latitude, geoObject.longitude);
+    
     markers[geoObject.id] = new google.maps.Marker({
       position: latlng,
       map: map,
@@ -35,6 +36,14 @@
       title:"GeoObject: " + geoObject.id
     });
     // centerMap(latlng);
+
+    var icon = null;
+    if(geoObject.data.type == "MovableAgent") {
+      icon = '/assets/bike.png';
+    } else if(geoObject.data.type == "BloggerAgent"){
+      icon = '/assets/post.png';
+    }
+    if(icon != null) markers[geoObject.id].setIcon(icon);
 
     addInfoWindow(geoObject, markers[geoObject.id]);
   }
@@ -56,7 +65,6 @@
   }
 
   function infoWindowSource(geoObject) {
-    $log(JSON.stringify(geoObject));
     var infoWindowContent = infoWindowTemplate.replace(/{GEOOBJECTID}/g, geoObject.id);
     infoWindowContent = infoWindowContent.replace(/{GEOOBJECTTYPE}/g, geoObject.data['type']);
     infoWindowContent = infoWindowContent.replace(/{GEOOBJECTDATA}/g, geoObject.data['body']);
@@ -91,12 +99,12 @@
   function onPercept(perception) {
     var geoObject = perception["data"];
 
-    if(perception["header"]["action"] == "Actions::DestroyAction") {
+    if(perception["header"]["action"] == "actions::destroy_action") {
       destroyGeoObject(geoObject);
       return;
     }
 
-    if(perception["header"]["action"] == "Actions::DestroyPostsAction") {
+    if(perception["header"]["action"] == "actions::destroy_posts_action") {
       destroyGeoObjects(geoObject.ids);
       return;
     }
@@ -108,16 +116,33 @@
     }
   }
 
-  function onEdgesPercept(perception) {
-    removeAllEdges();
-    var edges = perception["data"];
-    edges.each(function(edge) {
-      addEdge(edge);
+  function onPostsReadPercept(perception) {
+    var posts = perception['data'];
+    posts.each(function(post) {
+      if(markers[post.id] != null) {
+        markers[post.id].setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(function() {markers[post.id].setAnimation(null);}, 2000);
+      }
     });
   }
 
+  function onEdgesPercept(perception) {
+    //removeAllEdges();
+    //try{
+    var edges = perception["data"];
+    edges.each(function(edge) {
+      removeEdge(edge);
+    });
+    edges.each(function(edge) {
+      addEdge(edge);
+    });
+    //} catch(err) {
+    //  $log(err.stack);
+    //}
+  }
+
   function addEdge(edge) {
-    $log(JSON.stringify(edge));
+    //$log(JSON.stringify(edge));
     
     var edgeCoordinates = [
       new google.maps.LatLng(edge.from.latitude, edge.from.longitude),
@@ -132,7 +157,29 @@
     });
 
     edgePath.setMap(map);
-    mapEdges.push(edgePath);
+    var edgeIdx = edgeIndex(edge);
+    if(mapEdges[edgeIdx] == null) {
+      mapEdges[edgeIdx] = [];
+    }
+
+    mapEdges[edgeIdx].push(edgePath);
+  }
+
+  function edgeIndex(edge) {    
+    var sortedIds = [edge.from.id, edge.to.id].sort();
+    var index = "";
+    sortedIds.each(function(id){ return index += id; });
+    return index;
+  }
+
+  function removeEdge(edge) {
+    var edgeIdx = edgeIndex(edge);
+    if(mapEdges[edgeIdx] == null) return;
+    mapEdges[edgeIdx].each(function(mEdge) {
+      mEdge.setMap(null);
+      mEdge = null;
+    });
+    mapEdges[edgeIdx] = [];
   }
 
   function removeAllEdges() {
@@ -154,7 +201,6 @@
   $(document).ready(function() {
     initializeMap();
     geoObjects = <%= @geo_objects.html_safe %>;
-    $log(JSON.stringify(geoObjects));
     geoObjects.each(function(geoObject){
       addGeoObject(geoObject);
     });

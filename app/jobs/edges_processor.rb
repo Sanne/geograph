@@ -8,11 +8,7 @@ class EdgesProcessor
   # Starts the production
   def run
     Rails.logger.debug "Processing Edges"
-    Madmass.current_agent.execute({
-        :cmd => 'actions::process_edges',
-        # distance in meters
-        :distance => 2000
-      })
+    Madmass.current_agent.execute({ :cmd => 'actions::process_edges' })
   end
 
 end

@@ -44,6 +44,7 @@ end
 # Load domain models
 CloudTm::GeoObject   = Java::ItAlgoGeographDomain::GeoObject
 CloudTm::Agent       = Java::ItAlgoGeographDomain::Agent
+CloudTm::Job       = Java::ItAlgoGeographDomain::Job
 DomainRoot  = Java::ItAlgoGeographDomain::Root
 
 Dir[File.join(CLOUDTM_PATH, '*.rb')].each{|ruby|

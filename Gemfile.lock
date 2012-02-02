@@ -1,6 +1,5 @@
-GIT
-  remote: git://github.com/algorithmica/madmass.git
-  revision: 3a9ff8e493d281ef25b48c0ee14d5a6e68af27f7
+PATH
+  remote: /Users/genzo/algo_projects/madmass
   specs:
     madmass (0.1.1)
       bundler (~> 1.0.0)

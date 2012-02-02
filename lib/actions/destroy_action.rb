@@ -6,7 +6,12 @@
 module Actions
   class DestroyAction < Madmass::Action::Action
     action_params :geo_object
-
+    
+    def initialize params
+     super
+     @channels << :all
+    end
+    
     # [MANDATORY] Override this method in your action to define
     # the action effects.
     def execute
@@ -14,16 +19,11 @@ module Actions
       geo_object.destroy if geo_object
     end
 
-    def execute_ar
-      geo_object = GeoObject.where(:id => @parameters[:geo_object]).first
-      geo_object.destroy if geo_object
-    end
-
     # [MANDATORY] Override this method in your action to define
     # the perception content.
     def build_result
       p = Madmass::Perception::Percept.new(self)
-      p.add_headers({:topics => ['all']}) #who must receive the percept
+      #p.add_headers({:topics => ['all']}) #who must receive the percept
       p.data =  {:geo_object => {
           :id => @parameters[:geo_object]
           }
