@@ -22,9 +22,7 @@ jobs:
 #  stomplets:
 #    test_stomplet:
 #      class: Madmass::CommandsStomplet
-#      concurrency: 50
 #      route: '/madmass/domain'
 #      config:
 #        perceptions_destination: /topic/perceptions
 #        commands_destination: /queue/commands
-
