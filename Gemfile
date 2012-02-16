@@ -40,6 +40,5 @@ gem "activerecord-jdbc-adapter"
 gem "jdbc-sqlite3"
 
 gem "devise"
-#gem "madmass", :git => "git://github.com/algorithmica/madmass.git"
-gem 'madmass', :path => '/Users/genzo/algo_projects/madmass'
+gem "madmass", :git => "git://github.com/algorithmica/madmass.git"
 gem 'rcov', '0.9.11'
