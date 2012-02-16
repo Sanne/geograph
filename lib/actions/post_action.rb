@@ -73,7 +73,6 @@ module Actions
     # the perception content.
     def build_result
       p = Madmass::Perception::Percept.new(self)
-#      p.add_headers({:topics => ['all']}) #who must receive the percept
       p.data =  {
         :geo_agent => @agent.oid,
         :geo_object => {

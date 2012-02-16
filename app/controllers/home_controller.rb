@@ -29,16 +29,23 @@
 
 class HomeController < ApplicationController
   before_filter :authenticate_agent
-
+  include Madmass::Transaction::TxMonitor
+  around_filter :transact
+  
   def index
-    CloudTm::TxSystem.getManager.withTransaction do
-      @geo_objects = CloudTm::GeoObject.all.to_json
-    end
+    @geo_objects = CloudTm::GeoObject.all.to_json
   end
 
   def map
-    CloudTm::TxSystem.getManager.withTransaction do
-      @geo_objects = CloudTm::GeoObject.all.to_json
+    @geo_objects = CloudTm::GeoObject.all.to_json
+  end
+
+  private
+
+  def transact
+    tx_monitor do
+      yield
     end
   end
+
 end

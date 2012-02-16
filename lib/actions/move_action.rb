@@ -34,14 +34,13 @@
 
 module Actions
   class MoveAction < Madmass::Action::Action
-    action_params :latitude, :longitude, :geo_object, :data
+    action_params :latitude, :longitude, :geo_agent, :data
     #action_states :none
     #next_state :none
 
     # [OPTIONAL]  Add your initialization code here.
     def initialize params
       super
-      @geo_object = nil
       @channels << :all
     end
 
@@ -49,12 +48,28 @@ module Actions
     # [MANDATORY] Override this method in your action to define
     # the action effects.
     def execute
+      @agent = CloudTm::Agent.find(@parameters[:geo_agent])
+      unless @agent
+        @agent = CloudTm::Agent.create
+      end
+
+      has_geoobj = false
+      if @agent.hasAnyGeoObjects
+        @geo_object = @agent.getGeoObjects.first
+        has_geoobj = true
+      else
+        @geo_object = CloudTm::GeoObject.create
+      end
+
       @geo_object.update_attributes(
         :latitude => java.math.BigDecimal.new(@parameters[:latitude]),
         :longitude => java.math.BigDecimal.new(@parameters[:longitude]),
         :body => @parameters[:data][:body],
         :type => @parameters[:data][:type]
       )
+
+      @agent.addGeoObjects(@geo_object) unless has_geoobj
+
       if edges_enabled?
         @geo_object.renew_edges(@job.distance)
       end
@@ -64,8 +79,9 @@ module Actions
     # the perception content.
     def build_result
       p = Madmass::Perception::Percept.new(self)
-#      p.add_headers({:topics => ['all']}) #who must receive the percept
-      p.data =  {:geo_object => {
+      p.data =  {
+        :geo_agent => @agent.oid,
+        :geo_object => {
           :id => @geo_object.oid,
           :latitude => @geo_object.latitude.to_s,
           :longitude => @geo_object.longitude.to_s,
@@ -85,12 +101,12 @@ module Actions
     # [OPTIONAL] - The default implementation returns always true
     # Override this method in your action to define when the action is
     # applicable (i.e. to verify the action preconditions).
-    def applicable?
-      unless @geo_object = CloudTm::GeoObject.find(@parameters[:geo_object])
-        why_not_applicable.add(:'not-found', "Geo object #{@parameters[:geo_object]} doesn't exists.")
-      end
-      return why_not_applicable.empty?
-    end
+#    def applicable?
+#      unless @geo_object = CloudTm::GeoObject.find(@parameters[:geo_object])
+#        why_not_applicable.add(:'not-found', "Geo object #{@parameters[:geo_object]} doesn't exists.")
+#      end
+#      return why_not_applicable.empty?
+#    end
 
     # [OPTIONAL] Override this method to add parameters preprocessing code
     # The parameters can be found in the @parameters hash
