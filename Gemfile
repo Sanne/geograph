@@ -41,5 +41,5 @@ gem "jdbc-sqlite3"
 
 
 gem "devise"
-gem "madmass", :git => "git://github.com/algorithmica/madmass.git", :tag => "v0.1.3"
+gem "madmass", :git => "git://github.com/algorithmica/madmass.git", :branch => "tb2_beta3"
 gem 'rcov', '0.9.11'
