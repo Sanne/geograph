@@ -16,8 +16,9 @@ set :use_sudo,          false
 set :deploy_to,         "/opt/apps/geograph"
 set :torquebox_home,    "/opt/torquebox/current"
 set :jboss_init_script, "/etc/init.d/jboss-as-standalone"
-set :app_environment,   "RAILS_ENV: production"
+#set :app_environment,   "RAILS_ENV: production"
 set :app_context,       "/"
+
 
 #Added by vittorio
 #default_run_options[:pty] = true
@@ -28,6 +29,9 @@ ssh_options[:keys] = %w(~/.ssh/id_rsa)
 
 ssh_options[:forward_agent] = false
 
-role :web, "vm-103.uc.futuregrid.org"
-role :app, "vm-103.uc.futuregrid.org"
-role :db,  "vm-103.uc.futuregrid.org", :primary => true
+#Precompile asset pipeline
+load 'deploy/assets'
+
+role :web, "vm-102.uc.futuregrid.org"
+role :app, "vm-102.uc.futuregrid.org"
+role :db,  "vm-102.uc.futuregrid.org", :primary => true
