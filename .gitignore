@@ -10,6 +10,9 @@
 #ignore idea files
 .idea
 
+#precompiled assets
+/public/assets
+
 # Ignore the default SQLite database.
 /db/*.sqlite3
 

@@ -10,8 +10,9 @@ gem 'json'
 
 # Gems used only for assets and not required
 # in production environments by default.
-group :assets do
-  gem 'sass-rails',   '~> 3.1.4'
+group :assets do 
+  gem 'sass',   '3.1.4'
+  gem 'sass-rails',   '3.1.4'
   gem 'coffee-rails', '~> 3.1.1'
   gem 'uglifier', '>= 1.0.3'
 end
@@ -41,6 +42,6 @@ gem "jdbc-sqlite3"
 
 
 gem "devise"
-gem "madmass", :git => "git://github.com/algorithmica/madmass.git", :branch => "tb2_beta3", :tag =>"vrails2.2"
+gem "madmass", :git => "git://github.com/algorithmica/madmass.git", :branch => "tb2_beta3"
 gem 'rcov', '0.9.11'
 gem 'bundler','1.0.21'
