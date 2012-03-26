@@ -10,7 +10,7 @@ set :user,              "torquebox"
 set :scm,               :git
 set :scm_verbose,       true
 set :use_sudo,          false
-set :test_server,       "vm-102.uc.futuregrid.org"
+set :test_server,       "vm-178.uc.futuregrid.org"
 # Production server
 
 set :deploy_to,         "/opt/apps/#{application}"

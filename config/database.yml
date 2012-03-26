@@ -38,10 +38,13 @@ test:
 #  socket: /opt/local/var/run/mysql5/mysqld.sock
 
 production:
-  adapter: sqlite3
-  database: db/production.sqlite3
-  pool: 20
-  timeout: 10000
+  adapter: jdbcmysql
+      database: geograph_users
+      pool: 100
+      username: root
+      password:
+      driver: com.mysql.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/db_development
 
 #production:
 #  adapter: jdbcmysql
