@@ -39,12 +39,12 @@ test:
 
 production:
   adapter: jdbcmysql
-      database: geograph_users
-      pool: 100
-      username: root
-      password:
-      driver: com.mysql.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/db_development
+  database: geograph_users
+  pool: 100
+  username: root
+  password:
+  driver: com.mysql.jdbc.Driver
+  url: jdbc:mysql://localhost:3306/geograph_users
 
 #production:
 #  adapter: jdbcmysql
