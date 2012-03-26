@@ -37,7 +37,7 @@ gem "socky-client-rails", "0.4.5"
 gem "socky-server", "0.4.1"
 
 gem "jdbc-mysql"
-gem 'activerecord-jdbcmysql-adapterr'
+gem 'activerecord-jdbcmysql-adapter'
 #gem "activerecord-jdbc-adapter"
 #gem "jdbc-sqlite3"
 
