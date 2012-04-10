@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.3'
+#gem 'rails', '3.1.3'
 
 # Bundle edge Rails instead:
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
@@ -11,10 +11,10 @@ gem 'json'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do 
-  gem 'sass',   '3.1.4'
-  gem 'sass-rails',   '3.1.4'
-  gem 'coffee-rails', '~> 3.1.1'
-  gem 'uglifier', '>= 1.0.3'
+  gem 'sass' #,   '3.1.4'
+  gem 'sass-rails'#,   '3.1.4'
+  gem 'coffee-rails'#, '~> 3.1.1'
+  gem 'uglifier'#, '>= 1.0.3'
 end
 
 gem 'jquery-rails'
@@ -38,11 +38,11 @@ gem "socky-server", "0.4.1"
 
 gem "jdbc-mysql"
 gem 'activerecord-jdbcmysql-adapter'
-#gem "activerecord-jdbc-adapter"
-#gem "jdbc-sqlite3"
+gem "activerecord-jdbc-adapter"
+gem "jdbc-sqlite3"
 
 
 gem "devise"
-gem "madmass", :git => "git://github.com/algorithmica/madmass.git", :branch => "tb2_beta3"
-gem 'rcov', '0.9.11'
-gem 'bundler','1.0.21'
+gem "madmass", :git => "git://github.com/algorithmica/madmass.git", :branch => "master"
+#gem 'rcov', '0.9.11'
+#gem 'bundler','1.0.21'

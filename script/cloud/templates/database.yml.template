@@ -1,0 +1,58 @@
+# SQLite version 3.x
+#   gem 'activerecord-jdbcsqlite3-adapter'
+#
+# Configure Using Gemfile
+# gem 'activerecord-jdbcsqlite3-adapter'
+#
+development:
+  adapter: sqlite3
+  database: db/development.sqlite3
+  pool: 20
+  timeout: 10000
+
+#development:
+#  adapter: jdbcmysql
+#  encoding: utf8
+#  reconnect: false
+#  database: geograph_development
+#  pool: 20
+#  username: root
+#  password:
+#  socket: /opt/local/var/run/mysql5/mysqld.sock
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test:
+  adapter: sqlite3
+  database: db/test.sqlite3
+
+#test:
+#  adapter: jdbcmysql
+#  encoding: utf8
+#  reconnect: false
+#  database: geograph_test
+#  pool: 20
+#  username: root
+#  password: 
+#  socket: /opt/local/var/run/mysql5/mysqld.sock
+
+production:
+  adapter: jdbcmysql
+  econnect: false
+  database: geograph_production
+  pool: 100
+  username: root
+  password:
+  driver: com.mysql.jdbc.Driver
+  url: jdbc:mysql://{HOST}:3306/geograph_production
+
+#production:
+#  adapter: jdbcmysql
+#  encoding: utf8
+#  reconnect: false
+#  database: geograph_development
+#  pool: 20
+#  username: root
+#  password:
+#  socket: /opt/local/var/run/mysql5/mysqld.sock

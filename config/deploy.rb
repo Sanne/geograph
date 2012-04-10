@@ -10,7 +10,7 @@ set :user,              "torquebox"
 set :scm,               :git
 set :scm_verbose,       true
 set :use_sudo,          false
-set :test_server,       "vm-178.uc.futuregrid.org"
+#set :test_server,       "vm-178.uc.futuregrid.org"
 # Production server
 
 set :deploy_to,         "/opt/apps/#{application}"
@@ -32,6 +32,7 @@ ssh_options[:forward_agent] = false
 #Precompile asset pipeline
 load 'deploy/assets'
 
-role :web, "#{test_server}"
-role :app, "#{test_server}"
-role :db,  "#{test_server}", :primary => true
+
+role :web, "149.165.148.103"
+role :app, "149.165.148.107", "149.165.148.109"
+role :db,  "149.165.148.110", :primary => true
