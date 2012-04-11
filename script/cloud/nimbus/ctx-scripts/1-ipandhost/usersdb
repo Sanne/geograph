@@ -1,0 +1,2 @@
+#!/bin/bash
+/opt/torquebox/current/jruby/bin/jruby -S /opt/apps/geograph/current/script/cloud/set_db_host.rb $3 

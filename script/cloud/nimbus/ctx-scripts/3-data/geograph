@@ -1,0 +1,5 @@
+#!/bin/bash
+/opt/torquebox/current/jruby/bin/jruby -S /opt/apps/geograph/current/script/cloud/set_torquebox_host.rb
+/opt/jboss/httpd/sbin/apachectl stop
+/etc/init.d/mysqld stop
+service jboss-as-standalone restart

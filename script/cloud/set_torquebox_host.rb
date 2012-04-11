@@ -5,7 +5,8 @@ require 'yaml'
 host = %x(hostname).gsub("\n", '')
 puts "start setting mod cluster host with arguments #{host} ..."
 
-hosts_file_path = ARGV[0]
+conf_file = "cluster_nodes.yml"
+hosts_file_path = File.join("/tmp", conf_file)
 hosts = {}
 File.open(hosts_file_path, 'r') do |file|
   hosts = YAML.load(file.read)
