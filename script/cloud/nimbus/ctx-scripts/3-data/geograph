@@ -1,5 +1,10 @@
 #!/bin/bash
+sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "3-data/geograph" "starting geograph app server script"
 /opt/torquebox/current/jruby/bin/jruby -S /opt/apps/geograph/current/script/cloud/set_torquebox_host.rb
+sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "3-data/geograph" "setted host"
 /opt/jboss/httpd/sbin/apachectl stop
+sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "3-data/geograph" "stopped mod_cluster"
 /etc/init.d/mysqld stop
+sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "3-data/geograph" "stopped mysqld"
 service jboss-as-standalone restart
+sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "3-data/geograph" "restarted torquebox"
