@@ -17,9 +17,9 @@ httpd_conf_template = File.join("#{current_path}", 'templates', 'httpd.conf.temp
 
 # open the template file, replace the HOST_PLACEHOLDER with the host argument and override the original conf file
 File.open(httpd_conf_template, 'r') do |template|
-  httpd_conf = template.read.gsub(HOST_PLACEHOLDER, host)
+  httpd_conf_data = template.read.gsub(HOST_PLACEHOLDER, host)
   File.open(httpd_conf, 'w') do |original|
-    original.write httpd_conf
+    original.write httpd_conf_data
   end
 end
 

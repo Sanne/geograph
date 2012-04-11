@@ -498,6 +498,7 @@ LoadModule manager_module       /opt/jboss/httpd/lib/httpd/modules/mod_manager.s
 <Location /mod_cluster_manager>
     SetHandler mod_cluster-manager
     AllowDisplay On
+    Allow from all
 </Location>
 
 Listen {HOST}:6666
@@ -513,7 +514,7 @@ Listen {HOST}:6666
 
   EnableMCPMReceive
 
-  ManagerBalancerName torquebox-balancer
+  ManagerBalancerName {HOST}
   AllowDisplay On
   AdvertiseFrequency 5
   AdvertiseSecurityKey secret
