@@ -31,7 +31,7 @@ current_path = File.dirname(File.expand_path(__FILE__))
 torquebox_conf = File.join("#{source_root}", 'standalone-ha.xml')
 
 # path to the httpd.conf template file
-torquebox_conf_template = File.join("#{current_path}", 'templates', 'standalone-ha.xml.template')
+torquebox_conf_template = File.join("#{current_path}", 'templates', 'standalone-ha.xml.tb-2.0.0.template')
 
 # prepare infinispan configuration
 infinispan_conf = hosts[:cluster_nodes].map{|_host| "#{_host}[#{JGROUPS_TCP_PORT}]"}.join(',')
