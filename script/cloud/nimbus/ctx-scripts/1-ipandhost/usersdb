@@ -1,2 +1,4 @@
 #!/bin/bash
-/opt/torquebox/current/jruby/bin/jruby -S /opt/apps/geograph/current/script/cloud/set_db_host.rb $3 
+sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "1-ipandhost/usersdb" "invoked with $3"
+
+/opt/torquebox/current/jruby/bin/jruby -S /opt/apps/geograph/current/script/cloud/set_db_host.rb $3 && sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "1-ipandhost/geograph" "db host set"

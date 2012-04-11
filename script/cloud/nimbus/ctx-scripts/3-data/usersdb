@@ -1,4 +1,8 @@
 #!/bin/bash
-/opt/jboss/httpd/sbin/apachectl stop
-service jboss-as-standalone stop
-/etc/init.d/mysqld restart
+sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "3-data/usersdb" "invoked"
+
+/opt/jboss/httpd/sbin/apachectl stop && sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "3-data/usersdb" "apache stopped"
+
+service jboss-as-standalone stop && sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "3-data/usersdb" "jboss stopped"
+
+/etc/init.d/mysqld restart && sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "3-data/usersdb" "mysql started"

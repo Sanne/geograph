@@ -1,5 +1,10 @@
 #!/bin/bash
-/opt/torquebox/current/jruby/bin/jruby -S /opt/apps/geograph/current/script/cloud/set_modcluster_host.rb
-service jboss-as-standalone stop
-/etc/init.d/mysqld stop
-/opt/jboss/httpd/sbin/apachectl start
+sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "3-data/mod-cluster" "invoked"
+
+/opt/torquebox/current/jruby/bin/jruby -S /opt/apps/geograph/current/script/cloud/set_modcluster_host.rb && sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "3-data/mod-cluster" "mod cluster set"
+
+service jboss-as-standalone stop && sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "3-data/mod-cluster" "jboss stopped"
+
+/etc/init.d/mysqld stop && sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "3-data/mod-cluster" "mysql stopped"
+
+/opt/jboss/httpd/sbin/apachectl start && sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "3-data/mod-cluster" "apache started"
