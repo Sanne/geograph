@@ -9,4 +9,6 @@ sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "4-restarts/geograph" "
 
 service jboss-as-standalone restart && sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "4-restarts/geograph" "restarted torquebox"
 
+sh /opt/apps/geograph/current/script/cloud/nimbus/set_jboss_env.sh
+
 cd /opt/apps/geograph/current && RAILS_ENV=production /opt/torquebox/current/jruby/bin/jruby -S bundle exec rake torquebox:deploy && sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "4-restarts/geograph" "geograph deployed"
