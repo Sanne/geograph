@@ -34,7 +34,7 @@ gem 'jquery-rails'
 gem "jruby-openssl"
 gem "socky-client", "0.4.3"
 gem "socky-client-rails", "0.4.5"
-gem "socky-server", "0.4.1"
+#gem "socky-server", "0.4.1"
 
 gem "jdbc-mysql"
 gem 'activerecord-jdbcmysql-adapter'

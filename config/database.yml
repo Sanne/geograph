@@ -4,11 +4,21 @@
 # Configure Using Gemfile
 # gem 'activerecord-jdbcsqlite3-adapter'
 #
+#development:
+#  adapter: sqlite3
+#  database: db/development.sqlite3
+#  pool: 20
+#  timeout: 10000
+
 development:
-  adapter: sqlite3
-  database: db/development.sqlite3
-  pool: 20
-  timeout: 10000
+  adapter: jdbcmysql
+  reconnect: false
+  database: geograph_development
+  pool: 100
+  username: root
+  password: 
+  driver: com.mysql.jdbc.Driver
+  url: jdbc:mysql://localhost:3306/geograph_production
 
 #development:
 #  adapter: jdbcmysql
@@ -39,7 +49,8 @@ test:
 
 production:
   adapter: jdbcmysql
-  econnect: false
+  reconnect: false
+  xa: false
   database: geograph_production
   pool: 100
   username: root
