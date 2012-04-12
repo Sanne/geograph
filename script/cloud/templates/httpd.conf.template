@@ -516,7 +516,8 @@ Listen {HOST}:6666
 
   ManagerBalancerName {HOST}
   AllowDisplay On
-  AdvertiseFrequency 5
-  AdvertiseSecurityKey secret
+  ServerAdvertise Off
+  #AdvertiseFrequency 5
+  #AdvertiseSecurityKey secret
 
 </VirtualHost>

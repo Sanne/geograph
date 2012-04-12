@@ -39,7 +39,8 @@ test:
 
 production:
   adapter: jdbcmysql
-  econnect: false
+  reconnect: false
+  xa: false
   database: geograph_production
   pool: 100
   username: root
