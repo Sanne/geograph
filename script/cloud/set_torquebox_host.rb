@@ -3,7 +3,7 @@ require 'yaml'
 # This script given a host name of the torquebox node node and generates an appropriate standalone-ha.xml file.
 
 host = %x(hostname).gsub("\n", '')
-puts "start setting mod cluster host with arguments #{host} ..."
+puts "configuring geograph/torquebox with arguments #{host} ..."
 
 conf_file = "cluster_nodes.yml"
 hosts_file_path = File.join("/tmp", conf_file)
@@ -64,4 +64,4 @@ File.open(torquebox_conf_template, 'r') do |template|
   end
 end
 
-puts "mod cluster host set!"
+puts "geograph/torquebox configured!"

@@ -7,4 +7,6 @@ sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "4-restarts/geograph" "
 
 /etc/init.d/mysqld stop && sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "4-restarts/geograph" "stopped mysqld"
 
+cd /opt/apps/geograph/current && RAILS_ENV=production jruby -S bundle exec rake torquebox:deploy && sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "4-restarts/geograph" "geograph deployed"
+
 service jboss-as-standalone restart && sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "4-restarts/geograph" "restarted torquebox"
