@@ -33,6 +33,6 @@ ssh_options[:forward_agent] = false
 load 'deploy/assets'
 
 
-role :web, "vm-107.uc.futuregrid.org"
-role :app, "vm-107.uc.futuregrid.org"
-role :db,  "vm-107.uc.futuregrid.org", :primary => true
+role :web, "vm-104.uc.futuregrid.org"
+role :app, "vm-104.uc.futuregrid.org"
+role :db,  "vm-104.uc.futuregrid.org", :primary => true
