@@ -1,4 +1,9 @@
 #!/bin/bash
-sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "1-ipandhost/usersdb" "invoked with $3"
+# This script is called by each node that requires agent farm,
+# and is invoked with the ip and host as parameters (as many times
+# as the number of nodes with a agent farm role)
 
-/opt/torquebox/current/jruby/bin/jruby -S /opt/apps/geograph/current/script/cloud/set_db_host.rb $3 && sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "1-ipandhost/usersdb" "db host set"
+source /opt/apps/geograph/current/script/cloud/nimbus/set_app_host.sh
+sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "1-ipandhost/usersdb" "invoked with $3"
+
+$JRUBY_HOME/bin/jruby -S $GEOGRAPH_HOME/script/cloud/add_node.rb "db_nodes" $3 && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "1-ipandhost/usersdb" "add_node.rb invoked"

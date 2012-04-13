@@ -1,8 +1,9 @@
 #!/bin/bash
-sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "3-data/usersdb" "invoked"
+source /opt/apps/geograph/current/script/cloud/nimbus/set_app_host.sh
+sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/usersdb" "invoked"
 
-/opt/jboss/httpd/sbin/apachectl stop && sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "3-data/usersdb" "apache stopped"
+/opt/jboss/httpd/sbin/apachectl stop && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/usersdb" "apache stopped"
 
-service jboss-as-standalone stop && sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "3-data/usersdb" "jboss stopped"
+service jboss-as-standalone stop && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/usersdb" "jboss stopped"
 
-/etc/init.d/mysqld restart && sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "3-data/usersdb" "mysql started"
+/etc/init.d/mysqld restart && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/usersdb" "mysql started"

@@ -1,13 +1,13 @@
 #!/bin/bash
-sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "4-restarts/geograph" "invoked geograph app server script"
+source $GEOGRAPH_HOME/script/cloud/nimbus/set_app_host.sh
+sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "4-restarts/geograph" "invoked geograph app server script"
 
-/opt/torquebox/current/jruby/bin/jruby -S /opt/apps/geograph/current/script/cloud/set_torquebox_host.rb && sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "4-restarts/geograph" "setted host"
+$JRUBY_HOME/bin/jruby -S $GEOGRAPH_HOME/script/cloud/set_torquebox_host.rb "geograph" && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "4-restarts/geograph" "setted host"
 
-/opt/jboss/httpd/sbin/apachectl stop && sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "4-restarts/geograph" "stopped mod_cluster"
+/opt/jboss/httpd/sbin/apachectl stop && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "4-restarts/geograph" "stopped mod_cluster"
 
-/etc/init.d/mysqld stop && sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "4-restarts/geograph" "stopped mysqld"
+/etc/init.d/mysqld stop && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "4-restarts/geograph" "stopped mysqld"
 
-service jboss-as-standalone restart && sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "4-restarts/geograph" "restarted torquebox"
+service jboss-as-standalone restart && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "4-restarts/geograph" "restarted torquebox"
 
-su - torquebox -c "cd /opt/apps/geograph/current && RAILS_ENV=production /opt/torquebox/current/jruby/bin/jruby -S bundle exec rake torquebox:deploy" && sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "4-restarts/geograph" "geograph deployed"
-#su torquebox && sh /opt/apps/geograph/current/script/cloud/nimbus/set_jboss_env.sh && cd /opt/apps/geograph/current && RAILS_ENV=production /opt/torquebox/current/jruby/bin/jruby -S bundle exec rake torquebox:deploy && sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "4-restarts/geograph" "geograph deployed"
+su - torquebox -c "cd $GEOGRAPH_HOME && RAILS_ENV=production $JRUBY_HOME/bin/jruby -S bundle exec rake torquebox:deploy" && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "4-restarts/geograph" "geograph deployed"

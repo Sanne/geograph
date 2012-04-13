@@ -1,0 +1,9 @@
+#!/bin/bash
+# This script is called by each node that requires mod-cluster,
+# and is invoked with the ip and host as parameters (as many times
+# as the number of nodes with a mod-cluster role)
+
+source /opt/apps/geograph/current/script/cloud/nimbus/set_app_host.sh
+sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "1-ipandhost/geograph-mod-cluster" "invoked with $3"
+
+$JRUBY_HOME/bin/jruby -S $GEOGRAPH_HOME/script/cloud/add_node.rb "geograph_modcluster_nodes" $3 && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "1-ipandhost/geograph-mod-cluster" "invoked add_node"

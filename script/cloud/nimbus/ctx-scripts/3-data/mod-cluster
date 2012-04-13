@@ -1,10 +1,11 @@
 #!/bin/bash
-sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "3-data/mod-cluster" "invoked"
+source /opt/apps/geograph/current/script/cloud/nimbus/set_app_host.sh
+sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/mod-cluster" "invoked"
 
-/opt/torquebox/current/jruby/bin/jruby -S /opt/apps/geograph/current/script/cloud/set_modcluster_host.rb && sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "3-data/mod-cluster" "mod cluster set"
+$JRUBY_HOME/bin/jruby -S $GEOGRAPH_HOME/script/cloud/set_modcluster_host.rb && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/mod-cluster" "mod cluster set"
 
-service jboss-as-standalone stop && sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "3-data/mod-cluster" "jboss stopped"
+service jboss-as-standalone stop && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/mod-cluster" "jboss stopped"
 
-/etc/init.d/mysqld stop && sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "3-data/mod-cluster" "mysql stopped"
+/etc/init.d/mysqld stop && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/mod-cluster" "mysql stopped"
 
-/opt/jboss/httpd/sbin/apachectl start && sh /opt/apps/geograph/current/script/cloud/nimbus/log.sh "3-data/mod-cluster" "apache started"
+/opt/jboss/httpd/sbin/apachectl start && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/mod-cluster" "apache started"
