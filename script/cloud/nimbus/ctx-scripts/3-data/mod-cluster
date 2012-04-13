@@ -8,4 +8,6 @@ service jboss-as-standalone stop && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh
 
 /etc/init.d/mysqld stop && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/mod-cluster" "mysql stopped"
 
+/opt/jboss/httpd/sbin/apachectl stop && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/mod-cluster" "apache stopped"
+
 /opt/jboss/httpd/sbin/apachectl start && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/mod-cluster" "apache started"
