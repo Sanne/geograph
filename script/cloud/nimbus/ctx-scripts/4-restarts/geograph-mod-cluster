@@ -1,0 +1,13 @@
+#!/bin/bash
+source /opt/apps/geograph/current/script/cloud/nimbus/set_app_env.sh
+sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "4-restarts/geograph" "invoked geograph app server script"
+
+$JRUBY_HOME/bin/jruby -S $GEOGRAPH_HOME/script/cloud/set_torquebox_host.rb "geograph" && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "4-restarts/geograph" "setted host"
+
+/opt/jboss/httpd/sbin/apachectl stop && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "4-restarts/geograph" "stopped mod_cluster"
+
+/etc/init.d/mysqld stop && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "4-restarts/geograph" "stopped mysqld"
+
+service jboss-as-standalone restart && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "4-restarts/geograph" "restarted torquebox"
+
+su - torquebox -c "cd $GEOGRAPH_HOME && RAILS_ENV=production $JRUBY_HOME/bin/jruby -S bundle exec rake torquebox:deploy" && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "4-restarts/geograph" "geograph deployed"

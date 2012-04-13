@@ -1,5 +1,5 @@
 #!/bin/bash
-source /opt/apps/geograph/current/script/cloud/nimbus/set_app_host.sh
+source /opt/apps/geograph/current/script/cloud/nimbus/set_app_env.sh
 sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/agent-farm" "invoked"
 
 $JRUBY_HOME/bin/jruby -S $GEOGRAPH_HOME/script/cloud/set_db_host.rb "geograph-agent-farm" "agent_farm" && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/agent-farm" "db host set"

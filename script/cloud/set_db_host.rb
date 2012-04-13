@@ -1,4 +1,6 @@
 # This script given a host name of the database master node and generates an appropriate database.yml file.
+require 'yaml'
+
 HOST_PLACEHOLDER = "{HOST}"
 DBNAME_PLACEHOLDER = '{DBNAME}'
 

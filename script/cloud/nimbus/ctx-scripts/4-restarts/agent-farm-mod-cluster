@@ -1,5 +1,5 @@
 #!/bin/bash
-source $GEOGRAPH_HOME/script/cloud/nimbus/set_app_host.sh
+source /opt/apps/geograph/current/script/cloud/nimbus/set_app_env.sh
 sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "4-restarts/agent-farm-mod-cluster" "invoked agent-farm app server script"
 
 $JRUBY_HOME/bin/jruby -S $GEOGRAPH_HOME/script/cloud/set_torquebox_host.rb "geograph-agent-farm" && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "4-restarts/geograph" "setted host"
