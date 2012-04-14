@@ -1,0 +1,14 @@
+#!/bin/bash
+source /opt/apps/geograph/current/script/cloud/nimbus/set_app_env.sh
+sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/mod-cluster" "invoked"
+
+$JRUBY_HOME/bin/jruby -S $GEOGRAPH_HOME/script/cloud/set_modcluster_host.rb && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/mod-cluster" "mod cluster set"
+
+service jboss-as-standalone stop && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/mod-cluster" "jboss stopped"
+
+/etc/init.d/mysqld stop && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/mod-cluster" "mysql stopped"
+
+
+/bin/netstat -lnp | grep '0.0.0.0:80'
+
+/opt/jboss/httpd/sbin/apachectl restart && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/mod-cluster" "apache stopped"
