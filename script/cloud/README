@@ -1,0 +1,11 @@
+start a cluster
+./bin/cloud-client.sh --run --cluster conf/geograph_cluster.conf --hours 5
+
+stop a cluster
+./bin/cloud-client.sh --terminate --handle=cluster-063
+
+start a single node
+./bin/cloud-client.sh --run --hours 8 --name torquebox-2centos-5.7.gz
+
+save the instance image
+./bin/cloud-client.sh --save --handle=vm-087
