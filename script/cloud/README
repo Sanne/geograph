@@ -4,6 +4,9 @@ start a cluster
 stop a cluster
 ./bin/cloud-client.sh --terminate --handle=cluster-063
 
+cluster status
+./bin/cloud-client.sh --status
+
 start a single node
 ./bin/cloud-client.sh --run --hours 8 --name torquebox-2centos-5.7.gz
 
