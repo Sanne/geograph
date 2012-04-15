@@ -2,7 +2,8 @@
 # DO NOT EDIT MANUALLY 
 
         --- 
-:ws_adapter: Madmass::Comm::SockySender
+#:ws_adapter: Madmass::Comm::SockySender
+:ws_adapter: Madmass::Comm::JmsSender
 :host: localhost
 :port: "9090"
 :secure: "false"
@@ -11,7 +12,8 @@
 :ar: true
 :devise: true
 :torquebox: true
-:ws_client: :socky
+#:ws_client: :socky
+:ws_client: :stilts
 :stomplet_host: localhost
 :stomplet_port: 8675
 :stomplet_topic: /madmass/domain

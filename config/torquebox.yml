@@ -18,11 +18,11 @@ jobs:
     description:  Process edges for all geo objects
     singleton: true
 
-#stomp:
-#  stomplets:
-#    test_stomplet:
-#      class: Madmass::CommandsStomplet
-#      route: '/madmass/domain'
-#      config:
-#        perceptions_destination: /topic/perceptions
-#        commands_destination: /queue/commands
+stomp:
+  stomplets:
+    test_stomplet:
+      class: Madmass::CommandsStomplet
+      route: '/madmass/domain'
+      config:
+        perceptions_destination: /topic/perceptions
+        commands_destination: /queue/commands

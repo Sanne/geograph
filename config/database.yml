@@ -16,9 +16,9 @@ development:
   database: geograph_development
   pool: 100
   username: root
-  password: 
+  password: geograph
   driver: com.mysql.jdbc.Driver
-  url: jdbc:mysql://localhost:3306/geograph_production
+  url: jdbc:mysql://localhost:3306/geograph_development
 
 #development:
 #  adapter: jdbcmysql

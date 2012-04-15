@@ -27,9 +27,9 @@
 ###############################################################################
 ###############################################################################
 
-#require 'java'
+require 'java'
 
-#BigDecimal = java.math.BigDecimal
+BigDecimal = java.math.BigDecimal
 
 class BigDecimal
 
