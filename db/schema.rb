@@ -1,32 +1,3 @@
-###############################################################################
-###############################################################################
-#
-# This file is part of GeoGraph.
-#
-# Copyright (c) 2012 Algorithmica Srl
-#
-# GeoGraph is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Lesser General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# GeoGraph is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Lesser General Public License for more details.
-#
-# You should have received a copy of the GNU Lesser General Public License
-# along with GeoGraph.  If not, see <http://www.gnu.org/licenses/>.
-#
-# Contact us via email at info@algorithmica.it or at
-#
-# Algorithmica Srl
-# Vicolo di Sant'Agata 16
-# 00153 Rome, Italy
-#
-###############################################################################
-###############################################################################
-
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -43,8 +14,8 @@ ActiveRecord::Schema.define(:version => 20120120132428) do
 
   create_table "agents", :force => true do |t|
     t.string   "status"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
     t.float    "latitude"
     t.float    "longitude"
   end
@@ -57,8 +28,8 @@ ActiveRecord::Schema.define(:version => 20120120132428) do
   create_table "geo_objects", :force => true do |t|
     t.float    "latitude"
     t.float    "longitude"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
     t.text     "data"
     t.integer  "geo_referenced_id"
     t.string   "geo_referenced_type"
@@ -73,8 +44,8 @@ ActiveRecord::Schema.define(:version => 20120120132428) do
     t.string   "name"
     t.integer  "count"
     t.integer  "execution_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   create_table "users", :force => true do |t|
@@ -88,8 +59,8 @@ ActiveRecord::Schema.define(:version => 20120120132428) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                            :null => false
+    t.datetime "updated_at",                                            :null => false
     t.integer  "agent_id"
   end
 
