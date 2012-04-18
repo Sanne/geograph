@@ -44,14 +44,7 @@ module Geograph
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
-    # Custom directories with classes and modules you want to be autoloadable.
-    # Added explicit sub directory paths because of:
-    #http://stackoverflow.com/questions/7081782/inconsistent-loaderror-behavior-with-lib-namespacing-autoloading
-	  config.autoload_paths += %W(#{config.root}/lib)
-    config.autoload_paths += %W(#{config.root}/lib/actions)
-    config.autoload_paths += %W(#{config.root}/lib/cloud_tm)
-    config.autoload_paths += %W(#{config.root}/lib/fenix)
-    config.autoload_paths += %W(#{config.root}/lib/ogm)
+    config.autoload_paths += Dir["#{config.root}/lib", "#{config.root}/lib/**/"]
     # config.autoload_paths += %W(#{config.root}/extras)
 
     # Only load the plugins named here, in the order given (default is alphabetical).
