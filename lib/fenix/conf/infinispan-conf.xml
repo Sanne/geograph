@@ -10,8 +10,8 @@
 
     <default>
        <jmxStatistics enabled="true"/>
-       <clustering mode="distribution">
-          <hash numOwners="2" rehashRpcTimeout="120000"/>
+       <clustering mode="replication">
+          <!--<hash numOwners="2" rehashRpcTimeout="120000"/>-->
           <async/>
        </clustering>
     <!-- Default
